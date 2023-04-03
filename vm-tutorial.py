@@ -3,7 +3,6 @@ import streamlit.components.v1 as components
 import string
 from  display_profile import *
 from itertools import combinations
-import pandas as pd
 import numpy as np
 
 
