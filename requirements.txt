@@ -1,2 +1,5 @@
 pref_voting
 numpy
+numba
+nashpy
+seaborn

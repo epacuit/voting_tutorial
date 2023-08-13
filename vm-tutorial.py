@@ -155,7 +155,7 @@ with col2:
         st.graphviz_chart(dot)
 
     with tab2:
-        """The **margin** of a canidate $x$ over a candidate $y$, denoted $Margin(x, y)$, is the number of voters that rank $x$ above $y$ minus the number of voters that rank $y$ above $x$."""
+        """The **margin** of a candidate $x$ over a candidate $y$, denoted $Margin(x, y)$, is the number of voters that rank $x$ above $y$ minus the number of voters that rank $y$ above $x$."""
         """Candidate $x$ is  **majority preferred** to $y$ when $Margin(x, y)>0$."""
         print( [(None, None)] + list(combinations(prof.candidates, 2)))
         cands_for_margins = st.selectbox(
@@ -262,7 +262,7 @@ st.subheader("Voting Methods")
 
 display_profile(rs, cs, int(num_cands), [cmap[c] for c in prof.candidates], c1=None, c2=None, key="p2")
 
-pl_tab, borda_tab, pl_w_roff_tab, irv_tab, coombs_tab, minimax_tab, copeland_tab, sc_tab= st.tabs(["Plurality", "Borda", "Plurality with Runoff", "Instant Runoff", "Coombs", "Minimax", "Copeland", "Split Cycle"])
+pl_tab, borda_tab, pl_w_roff_tab, irv_tab, coombs_tab, minimax_tab, copeland_tab, sc_tab= st.tabs(["Plurality", "Borda",  "Instant Runoff", "Coombs", "Minimax", "Copeland", "Split Cycle"])
 
 with pl_tab: 
     vm_string = "Plurality"
@@ -317,7 +317,7 @@ with borda_tab:
         scores = list(range(len(prof.candidates)-1, -1, -1))
         bscores = prof.borda_scores()
         with st.expander("Explain the Borda winners"):
-            st.write("The **Borda score** for a candidate is determined as follows:  Each voter gives 3 points to the candidate ranked in first palce, 2 points to the candidate ranked in 2nd place, $\\ldots$, 0 points to the candidate ranked in last place.  The candidates overall Borda score is the sum of the Borda scores assigned from each voter.   The candidate(s) with the largest Borda score is a Borda winner.")
+            st.write("The **Borda score** for a candidate is determined as follows:  Each voter gives 3 points to the candidate ranked in first place, 2 points to the candidate ranked in 2nd place, $\\ldots$, 0 points to the candidate ranked in last place.  The candidates overall Borda score is the sum of the Borda scores assigned from each voter.   The candidate(s) with the largest Borda score is a Borda winner.")
 
             st.write(f"The largest Borda score is {max(bscores.values())}")
             for c in prof.candidates: 
@@ -347,8 +347,7 @@ with pl_w_roff_tab:
         else: 
             st.write("You must select some candidates.")
         with st.expander(f"Explain the {vm_string} winners"):
-            st.write("The **Plurality with Runoff** winners are determined as follows.  If there is a majority winner then that candidate is the Plurality with Runoff winner. If there is no majority winner, then hold a runoff with  the top two candidates: either two (or more candidates) with the most first place votes or the candidate with the most first place votes and the candidate with the 2nd highest first place votes are ranked first by the fewest number of voters.   A candidate is a Plurality with Runoff winner if it is a winner in a runoff between two pairs of first- or second- ranked candidates. If the candidates are all tied for the most first place votes, then all candidates are winners.")
-
+            st.write("The **Plurality with Runoff** winners are determined as follows.  If there is a majority winner then that candidate is the Plurality with Runoff winner. If there is no majority winner, then hold a runoff with  the top two candidates: either two (or more candidates) with the most first place votes or the candidate with the most first place votes and the candidate with the 2nd highest first place votes are ranked first by the fewest number of voters.  A candidate is a Plurality with Runoff winner if it is a winner in a runoff between two pairs of first- or second- ranked candidates. If the candidates are all tied for the most first place votes, then all candidates are winners.")
 
             maj_winner = majority(prof)
             
@@ -575,7 +574,7 @@ with copeland_tab:
 
 with sc_tab: 
     vm_string = "Split Cycle"
-    sc_ws = split_cycle_faster(prof)
+    sc_ws = split_cycle(prof)
     sc_submitted_winning_set = st.multiselect(
         f'Which candidates are the {vm_string} winners?',
         [cmap[c] for c in prof.candidates],
