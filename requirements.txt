@@ -1,5 +1,5 @@
 pref_voting
-numpy
+numpy==1.24
 numba
 nashpy
 seaborn
