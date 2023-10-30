@@ -105,7 +105,7 @@ def generate_sc_defeat_dot(sc_defeat, cmap):
     dot = '''digraph { \n layout="circo";\n''' + node_strings + "\n" + edge_strings + "}"
     return dot
 
-@st.cache_data
+@st.cache_resource
 def gen_profile(num_cands, num_voters, fixed_profile=None):
     print(fixed_profile)
     if fixed_profile not in fixed_profiles.keys(): 
@@ -126,7 +126,7 @@ with st.sidebar.form("generate_profile"):
    submitted = st.form_submit_button("Generate Profile")
    if submitted:
        if fixed_profile_str == "":
-           st.cache_data.clear()
+           st.cache_resource.clear()
        else:
            num_cands = len(fixed_profiles[fixed_profile_str].candidates)
            num_voters = fixed_profiles[fixed_profile_str].num_voters
@@ -262,7 +262,14 @@ st.subheader("Voting Methods")
 
 display_profile(rs, cs, int(num_cands), [cmap[c] for c in prof.candidates], c1=None, c2=None, key="p2")
 
-pl_tab, borda_tab, pl_w_roff_tab, irv_tab, coombs_tab, minimax_tab, copeland_tab, sc_tab= st.tabs(["Plurality", "Borda",  "Instant Runoff", "Coombs", "Minimax", "Copeland", "Split Cycle"])
+pl_tab, borda_tab, irv_tab, coombs_tab, minimax_tab, copeland_tab, sc_tab= st.tabs([
+    "Plurality", 
+    "Borda",  
+    "Instant Runoff", 
+    "Coombs", 
+    "Minimax", 
+    "Copeland", 
+    "Split Cycle"])
 
 with pl_tab: 
     vm_string = "Plurality"
@@ -325,49 +332,6 @@ with borda_tab:
                 bscore_str = ' + '.join([f"{str(x)} * {str(y)} " for x, y in zip(scores, num_ranks)])
                 st.write(f"* The Borda score of ${cmap[c]}$ is ${bscore_str} = {bscores[c]}$ " + ("(winner)" if c in borda_ws else ""))
 
-with pl_w_roff_tab: 
-    vm_string = "Plurality with Runoff"
-    pl_w_runoff_ws = plurality_with_runoff(prof)
-    pl_runoff_submitted_winning_set = st.multiselect(
-        f'Which candidates are the {vm_string} winners?',
-        [cmap[c] for c in prof.candidates],
-        [])
-    if st.button(f"Check {vm_string} winners"):
-        if len(pl_runoff_submitted_winning_set) > 0: 
-            if same_candidate_sets(pl_ws, pl_submitted_winning_set, cmap):
-                st.success(f"Correct, the {vm_string} winning set is: {', '.join(pl_runoff_submitted_winning_set)}.")
-            else: 
-                for cname in pl_runoff_submitted_winning_set: 
-                    if not cname in [cmap[_c] for _c in pl_ws]: 
-                        st.error(f"${cname}$ is not a {vm_string} winner.")
-                for w in pl_ws: 
-                    if cmap[w] not in pl_runoff_submitted_winning_set:
-                        st.error(f"${cmap[w]}$ is a {vm_string}  winner.")
-            st.write()
-        else: 
-            st.write("You must select some candidates.")
-        with st.expander(f"Explain the {vm_string} winners"):
-            st.write("The **Plurality with Runoff** winners are determined as follows.  If there is a majority winner then that candidate is the Plurality with Runoff winner. If there is no majority winner, then hold a runoff with  the top two candidates: either two (or more candidates) with the most first place votes or the candidate with the most first place votes and the candidate with the 2nd highest first place votes are ranked first by the fewest number of voters.  A candidate is a Plurality with Runoff winner if it is a winner in a runoff between two pairs of first- or second- ranked candidates. If the candidates are all tied for the most first place votes, then all candidates are winners.")
-
-            maj_winner = majority(prof)
-            
-            if len(maj_winner) == 1:
-                st.write(f"${cmap[maj_winner[0]]}$ is a majority winner.")
-            else:
-                pl_runoff_ws, plr_exp = plurality_with_runoff_with_explanation(prof)
-                st.write(f"The Plurality with Runoff winners: {cand_list_str(pl_runoff_ws, cmap)}.")
-
-                runoffs = list()
-                for c1, c2 in plr_exp: 
-                    if all([not (runoff[0] == c1 and runoff[1] == c2) and not (runoff[1] == c1 and runoff[0] == c2) for runoff in runoffs]):
-                        runoffs.append((c1, c2))
-                        if prof.majority_prefers(c1, c2): 
-                            st.write(f"* In the runoff between {cmap[c1]} and {cmap[c2]}, the winner is {cmap[c1]} by a margin of {prof.margin(c1, c2)}.")
-                        elif prof.majority_prefers(c2, c1): 
-                            st.write(f"* In the runoff between {cmap[c1]} and {cmap[c2]}, the winner is {cmap[c2]} by a margin of {prof.margin(c2, c1)}.")
-                        else: 
-                            st.write(f"* In the runoff between {cmap[c1]} and {cmap[c2]},  {cmap[c1]} and {cmap[c2]} are tied.")
-                        
 
 with irv_tab: 
     vm_string = "Instant Runoff Voting"
