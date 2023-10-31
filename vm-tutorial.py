@@ -287,17 +287,16 @@ with pl_tab:
                         st.error(f"${cname}$ is not a {vm_string} winner.")
                 for w in pl_ws: 
                     if cmap[w] not in pl_submitted_winning_set:
-                        st.error(f"${cmap[w]}$ is a {vm_string}  winner.")
+                        st.error(f"${cmap[w]}$ is a {vm_string} winner.")
             st.write()
         else: 
             st.write("You must select some candidates.")
         with st.expander(f"Explain the {vm_string} winners"):
-            st.write("The **Plurality score** for a candidate is that rank that candidate in first place.   The candidate(s) with the largest Plurality score is a Plurality winner.")
+            st.write("The **Plurality score** of a candidate $x$ is the number of voters that rank $x$ in first place.   The candidate(s) with the largest Plurality score is a Plurality winner.")
             plscores = prof.plurality_scores()
             st.write(f"The largest Plurality score is {max(plscores.values())}")
             for c in prof.candidates: 
                 st.write(f"* The Plurality score of ${cmap[c]}$ is ${plscores[c]}$ " + ("(winner)" if c in pl_ws else ""))
-
 
 with borda_tab: 
     borda_ws = borda(prof)
@@ -321,9 +320,10 @@ with borda_tab:
             st.write("You must select some candidates.")
 
         scores = list(range(len(prof.candidates)-1, -1, -1))
+        #scores_str = ', '.join([f'{str(s)} points to the candidate ranked in ' for s in scores[0:-1]])
         bscores = prof.borda_scores()
         with st.expander("Explain the Borda winners"):
-            st.write("The **Borda score** for a candidate is determined as follows:  Each voter gives 3 points to the candidate ranked in first place, 2 points to the candidate ranked in 2nd place, $\\ldots$, 0 points to the candidate ranked in last place.  The candidates overall Borda score is the sum of the Borda scores assigned from each voter.   The candidate(s) with the largest Borda score is a Borda winner.")
+            st.write(f"The **Borda score** for a candidate is determined as follows:  Each voter gives {scores[0]} points to the candidate ranked in first place, {scores[1]} points to the candidate ranked in 2nd place, $\\ldots$, and 0 points to the candidate ranked in last place.  The candidates overall Borda score is the sum of the Borda scores assigned from each voter.   The candidate(s) with the largest Borda score is a Borda winner.")
 
             st.write(f"The largest Borda score is {max(bscores.values())}")
             for c in prof.candidates: 
@@ -460,7 +460,7 @@ with minimax_tab:
         else: 
             st.write("You must select some candidates.")
         with st.expander(f"Explain the {vm_string} winners"):
-            st.write("""The **Minimax** winners are determined as follows. Say that the head-to-head loss of a candidate $x$ with a candidate $y$ is the margin of $y$ over $x$.  For each candidate, find the largest head-to-head loss.  Any candidate  with the smallest head-to-head loss is a winner.""")
+            st.write("""The **Minimax** winners are determined as follows. Say that the head-to-head loss of a candidate $x$ with a candidate $y$ is the margin of $y$ over $x$.  For each candidate, minimax scores for that candidate is the largest head-to-head loss.  Any candidate  with the smallest minimax score is a winner.""")
 
             dot = generate_mg_dot(prof, cmap)
             st.graphviz_chart(dot)
