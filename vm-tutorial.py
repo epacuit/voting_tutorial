@@ -5,6 +5,8 @@ from  display_profile import *
 from itertools import combinations
 import numpy as np
 
+st.write("test")
+st.stop()
 
 from pref_voting.profiles import Profile
 from pref_voting.generate_profiles import *
