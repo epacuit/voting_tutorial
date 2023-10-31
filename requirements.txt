@@ -1,5 +1,5 @@
 pref_voting
-numpy==1.23
-numba==0.58.1
+numpy
+numba
 nashpy
 seaborn
