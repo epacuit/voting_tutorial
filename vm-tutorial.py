@@ -320,6 +320,7 @@ with borda_tab:
             st.write("You must select some candidates.")
 
         scores = list(range(len(prof.candidates)-1, -1, -1))
+        st.write(scores)
         #scores_str = ', '.join([f'{str(s)} points to the candidate ranked in ' for s in scores[0:-1]])
         bscores = prof.borda_scores()
         with st.expander("Explain the Borda winners"):
