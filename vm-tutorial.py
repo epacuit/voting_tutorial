@@ -460,7 +460,7 @@ with minimax_tab:
         else: 
             st.write("You must select some candidates.")
         with st.expander(f"Explain the {vm_string} winners"):
-            st.write("""The **Minimax** winners are determined as follows. Say that the head-to-head loss of a candidate $x$ with a candidate $y$ is the margin of $y$ over $x$.  For each candidate, minimax scores for that candidate is the largest head-to-head loss.  Any candidate  with the smallest minimax score is a winner.""")
+            st.write("""The **Minimax** winners are determined as follows. Say that the head-to-head loss of a candidate $x$ with a candidate $y$ is the margin of $y$ over $x$.  For each candidate, minimax score for that candidate is the largest head-to-head loss.  Any candidate  with the smallest minimax score is a winner.""")
 
             dot = generate_mg_dot(prof, cmap)
             st.graphviz_chart(dot)
@@ -474,7 +474,7 @@ with minimax_tab:
                     min_max_loss = max_loss
                 minimax_data[c] = max_loss
             
-            st.write(f"The minimum largest head-to-head loss for any candidate is {min_max_loss}")
+            st.write(f"The minimum minimax score (i.e., the largest head-to-head loss) for any candidate is {min_max_loss}")
 
             for c in prof.candidates:
 
