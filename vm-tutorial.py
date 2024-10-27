@@ -357,7 +357,7 @@ with irv_tab:
             st.write("""The **Instant Runoff Voting** (also known as Ranked Choice Voting) winners are determined as follows.  If there is a candidate that is the majority winner, then that candidate is the Instant Runoff Voting winner.  Otherwise, iteratively remove all candidates with the fewest number of voters who rank them first, until there is a candidate who is a majority  winner.  Then that candidate is the Instant Runoff Voting winner.  If, at some stage of the removal process, all remaining candidates have the same number of  voters who rank them first (so all candidates would be removed), then all remaining candidates  are selected as Instant Runoff Voting winners.""")
 
             st.write(f"The Instant Runoff Voting winners: {', '.join([cmap[w] for w in irv_ws])}.")
-            maj_winner = majority(prof)
+            maj_winner = absolute_majority(prof)
             
             if len(maj_winner) == 1:
                 st.write(f"${cmap[maj_winner[0]]}$ is a majority winner.")
@@ -378,7 +378,7 @@ with irv_tab:
 
                 display_profile(reduced_rs, reduced_cs, int(len(reduced_prof.candidates)), [updated_cmap[c] for c in reduced_prof.candidates], c1=None, c2=None, key=f"irv_p_{r}")
 
-                reduced_maj_winner = majority(reduced_prof)
+                reduced_maj_winner = absolute_majority(reduced_prof)
                 if len(reduced_maj_winner) == 1: 
                     st.write(f"{updated_cmap[reduced_maj_winner[0]]} is the majority winner in the reduced profile.")
                 else: 
@@ -410,7 +410,7 @@ with coombs_tab:
             st.write("""The **Coombs** winners are determined as follows.  If there is a candidate that is the majority winner, then that candidate is the Coombs winner.  Otherwise, iteratively remove all candidates with the largest number of voters who rank them last, until there is a candidate who is a majority  winner.  Then that candidate is the Coombs winner.  If, at some stage of the removal process, all remaining candidates have the same number of  voters who rank them first (so all candidates would be removed), then all remaining candidates  are selected as Coombs winners.""")
 
             st.write(f"The Coombs winners: {', '.join([cmap[w] for w in coombs_ws])}.")
-            maj_winner = majority(prof)
+            maj_winner = absolute_majority(prof)
 
             if len(maj_winner) == 1:
                 st.write(f"${cmap[maj_winner[0]]}$ is a majority winner.")
@@ -431,7 +431,7 @@ with coombs_tab:
 
                 display_profile(reduced_rs, reduced_cs, int(len(reduced_prof.candidates)), [updated_cmap[c] for c in reduced_prof.candidates], c1=None, c2=None, key=f"coombs_p_{r}")
 
-                reduced_maj_winner = majority(reduced_prof)
+                reduced_maj_winner = absolute_majority(reduced_prof)
                 if len(reduced_maj_winner) == 1: 
                     st.write(f"{updated_cmap[reduced_maj_winner[0]]} is the majority winner in the reduced profile.")
                 else: 
