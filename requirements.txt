@@ -1,3 +1,4 @@
+streamlit
 pref_voting
 numpy
 numba
