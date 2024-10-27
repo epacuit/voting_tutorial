@@ -108,7 +108,7 @@ def generate_sc_defeat_dot(sc_defeat, cmap):
 def gen_profile(num_cands, num_voters, fixed_profile=None):
     print(fixed_profile)
     if fixed_profile not in fixed_profiles.keys(): 
-        return generate_profile(num_cands, num_voters)
+        return generate_profile(num_cands, num_voters).anonymize()
     else: 
         return fixed_profiles[fixed_profile]
 
@@ -181,7 +181,7 @@ with col1:
 
 condorcet_winner = prof.condorcet_winner()
 condorcet_loser = prof.condorcet_loser()
-majority_winner = majority(prof)
+majority_winner = absolute_majority(prof)
 cycles = prof.cycles()
 
 if len(majority_winner) == 1: 
